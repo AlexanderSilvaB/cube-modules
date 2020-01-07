@@ -2,7 +2,9 @@
     "name" : "cv",
     "description": "OpenCV for Cube",
     "version": "1.0",
-    "dependencies": {},
+    "dependencies": [
+        
+    ],
     "files": [
         "cube/cv.cube"
     ],

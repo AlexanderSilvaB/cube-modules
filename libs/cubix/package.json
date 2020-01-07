@@ -1,0 +1,15 @@
+{
+    "name" : "cubic",
+    "description": "The cube package manager",
+    "version": "1.0",
+    "bin" : true,
+    "dependencies": [ 
+        "net", "ui" 
+    ],
+    "files": [
+        "cube/cubix.cube"
+    ],
+    "native" : [
+        "libcv"
+    ]
+}
