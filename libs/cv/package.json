@@ -1,0 +1,12 @@
+{
+    "name" : "cv",
+    "description": "OpenCV for Cube",
+    "version": "1.0",
+    "dependencies": {},
+    "files": [
+        "cube/cv.cube"
+    ],
+    "native" : [
+        "libcv"
+    ]
+}

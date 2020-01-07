@@ -1,10 +1,11 @@
 # Ignore everything
-*
+/*
 
 # But not these files...
-!.gitignore
-!LICENSE
-!README.md
+!/.gitignore
+!/LICENSE
+!/README.md
+!/index.json
 
 !libs/
 !libs/*
