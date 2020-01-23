@@ -1,0 +1,56 @@
+class WebTemplate
+{
+    var result = '';
+    var data = {};
+
+    func print()
+    {
+        this.result += args.join('');
+    }
+
+    func println()
+    {
+        this.result += args.join('');
+        this.result += '\n';
+    }
+
+    func clear()
+    {
+        this.result = '';
+        this.data = {};
+    }
+
+    func html(code)
+    {
+        this.result = code;
+    }
+
+    func append(code)
+    {
+        this.result += code;
+    }
+
+    func load(fileName)
+    {
+        with(fileName, 'r')
+        {
+            this.result = file.read();
+        }
+    }
+
+    func parse()
+    {
+        var innerKey;
+        var keys = this.data.keys();
+        for(var key in keys)
+        {
+            innerKey = '{'+key+'}';
+            this.result = this.result.replace(innerKey, this.data[key]);
+        }
+    }
+
+    func add(name, value)
+    {
+        this.data[name] = value;
+    }
+}

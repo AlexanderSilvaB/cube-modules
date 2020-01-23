@@ -1,6 +1,7 @@
 {
     "packages" : [
         "libs/cv",
-        "libs/cubix"
+        "libs/cubix",
+        "libs/web"
     ]
 }

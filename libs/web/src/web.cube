@@ -1,0 +1,85 @@
+import net;
+import paths;
+import webTemplate as default;
+
+
+global var Web = WebTemplate();
+
+func getPage(server, client, request, data)
+{
+    if(isempty(request))
+    {
+        request = '.';
+        for(var f in ls())
+        {
+            if(f.startsWith('index.'))
+                request = f;
+        }
+    }
+
+    println('Requested: ', request);
+        
+    var response = '';
+    if(exists(request))
+    {
+        global var POST = data['data'];
+        global var GET = data['args'];
+        try
+        {
+            var requestCube = request;
+            if(!requestCube.endsWith('.cube'))
+                requestCube += '.cube';
+
+            if(exists(requestCube))
+            {
+                require request;
+                response = Web.result;
+                Web.clear();
+            }
+            else if(isdir(request))
+            {
+                if(!request.endsWith('/'))
+                    request += '/';
+                var filesList = ls(request);
+                response = '<html><body><h3>Index</h3>';
+                for(var f in filesList)
+                {
+                    if(f == '..')
+                    {
+                        request = paths.back(request);
+                        response += '<a href="{}../">{}</a></br>'.format(request, f);
+                    }
+                    else if(f == '.')
+                        response += '<a href="">{}</a></br>'.format(f);
+                    else
+                        response += '<a href="{}{}">{}</a></br>'.format(request, f, f);
+                }
+                response += '</body></html>';
+            }
+            else
+            {
+                with(request, 'rb')
+                {
+                    response = file.read();
+                }
+            }
+        }
+        catch(e)
+        {
+            response = e;
+        }
+    }
+    else
+        server.setCode(HTTP.NOT_FOUND);
+    return response;
+}
+
+var server = net.HTTPServer(8080);
+server.get(getPage);
+server.post(getPage);
+
+println("Running web server at http://localhost:{}".format(server.port));
+if(!server.run())
+{
+    println("Failed on running the server");
+}
