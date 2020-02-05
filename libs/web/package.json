@@ -4,7 +4,7 @@
     "version": "1.0",
     "bin" : true,
     "dependencies": [ 
-        "net"
+        "socket"
     ],
     "files": [
         "src/web.cube",

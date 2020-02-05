@@ -2,6 +2,7 @@
     "packages" : [
         "libs/cv",
         "libs/cubix",
-        "libs/web"
+        "libs/web",
+        "libs/bt"
     ]
 }

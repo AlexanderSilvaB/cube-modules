@@ -1,4 +1,4 @@
-import net;
+import socket;
 import paths;
 import webTemplate as default;
 
@@ -74,7 +74,7 @@ func getPage(server, client, request, data)
     return response;
 }
 
-var server = net.HTTPServer(8080);
+var server = socket.HTTPServer(8080);
 server.get(getPage);
 server.post(getPage);
 
