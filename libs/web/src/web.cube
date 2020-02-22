@@ -32,7 +32,7 @@ func getPage(server, client, request, data)
 
             if(exists(requestCube))
             {
-                require request;
+                require(request);
                 response = Web.result;
                 Web.clear();
             }
