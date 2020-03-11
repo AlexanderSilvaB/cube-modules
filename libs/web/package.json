@@ -1,16 +1,16 @@
 {
-    "name" : "web",
+    "name": "web",
     "description": "Cube Web Server",
     "version": "1.0",
-    "bin" : true,
-    "dependencies": [ 
+    "bin": [
+        "web.cube"
+    ],
+    "dependencies": [
         "socket"
     ],
     "files": [
         "src/web.cube",
         "src/WebTemplate.cube"
     ],
-    "native" : [
-        
-    ]
+    "native": []
 }
