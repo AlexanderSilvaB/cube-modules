@@ -5,7 +5,7 @@ enum Status
 
 class Node
 {
-    var name = none;
+    var name = null;
     static var id = 0;
 
     func init()
@@ -133,12 +133,12 @@ class Inverter : Node
 
 class BT
 {
-    var root = none;
+    var root = null;
     var interval = 30;
 
     func init(root, interval)
     {
-        if(interval == none)
+        if(interval == null)
             interval = 30;
 
         this.root = root;

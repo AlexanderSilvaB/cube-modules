@@ -10,7 +10,7 @@
     ],
     "files": [
         "src/web.cube",
-        "src/WebTemplate.cube"
+        "src/webTemplate.cube"
     ],
     "native": []
 }
