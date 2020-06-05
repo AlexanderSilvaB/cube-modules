@@ -1,0 +1,64 @@
+import game
+import robotOne as ro
+
+// Display
+game.display.title('Window')
+game.display.size(320, 240)
+
+// Robot
+ro.connect("127.0.0.1")
+ro.trace(true)
+ro.odometryStd([0, 0])
+
+// Camera view
+var img = game.image.create(320, 240, false)
+var imgData = game.image.data(img)
+
+// Control
+var Vlinear = 10.0
+var Radius = 10.0
+var Vangular = Vlinear / Radius
+var camera
+
+// Run
+var quit = false
+while(!quit)
+{
+    var start = clock();
+
+    // Proccess events
+    var ev = game.events.get()
+    for(var e in ev)
+    {
+        if(e.type == game.events.types.QUIT)
+        {
+            quit = true
+        }
+    }
+
+    // Update robot
+    ro.velocity([Vlinear, Vangular])
+    camera = ro.camera()
+
+    // Update image
+    if(camera is not null)
+    {
+        camera.copyTo(imgData)
+        game.image.blit(img)
+    }
+
+    // Draw scene
+    game.display.clear()
+    game.display.draw(img)
+    game.display.update()
+
+    println(clock() - start)
+
+    // Waits the next robot cycle
+    ro.wait()
+}
+
+// Disconnect the robot
+ro.velocity([0, 0])
+ro.trace(false)
+ro.disconnect()

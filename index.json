@@ -1,7 +1,8 @@
 {
-    "packages" : [
+    "packages": [
         "libs/cv",
         "libs/web",
-        "libs/bt"
+        "libs/bt",
+        "libs/robotOne"
     ]
 }

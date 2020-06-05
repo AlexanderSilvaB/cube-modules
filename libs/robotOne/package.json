@@ -1,0 +1,14 @@
+{
+    "name": "robotOne",
+    "description": "RobotOne Connector for Cube",
+    "version": "1.0",
+    "dependencies": [],
+    "files": [
+        "src/cube/robotOne.cube"
+    ],
+    "examples": [
+        "src/examples/camera.cube",
+        "src/examples/pid.cube",
+        "src/examples/bug-1.cube"
+    ]
+}

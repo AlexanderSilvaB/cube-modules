@@ -1,0 +1,288 @@
+native librobotOne
+{
+    int connectRobotOne(cstring);
+    int disconnectRobotOne();
+    float versionRobotOne();
+    float waitRobotOne();
+    float get(cstring);
+    float set(cstring, float);
+    cbytes getData();
+    float setData(cstring, int, cbytes);
+}
+
+import math
+
+var connected = false
+
+func connect(addr)
+{
+    if(addr is null)
+        addr = '127.0.0.1'
+    
+    connected = bool(connectRobotOne(addr))
+    return connected
+}
+
+func disconnect()
+{
+    connected = not bool(disconnectRobotOne())
+    return not connected
+}
+
+
+func version()
+{
+    return versionRobotOne()
+}
+
+func wait()
+{
+    return waitRobotOne()
+}
+
+func get(name)
+{
+    return librobotOne.callRet('get', 'float', name, 'cstring')
+}
+    
+func set(name, value)
+{
+    return librobotOne.callRet('set', 'float', [name, value], ['cstring', 'float'])
+}
+
+func pose(p)
+{
+    var x, y, theta
+
+    if(p is null)
+    {
+        x = get('Pose.X')
+        y = get('Pose.Y')
+        theta = get('Pose.Theta')
+    }
+    else
+    {
+        x = set('Pose.X', p[0])
+        y = set('Pose.Y', p[1])
+        theta = set('Pose.Theta', p[2])
+    }
+
+    return [x, y, theta]
+}
+
+func odometry(p)
+{
+    var x, y, theta
+    
+    if(p is null)
+    {
+        x = get('Odometry.X')
+        y = get('Odometry.Y')
+        theta = get('Odometry.Theta')
+    }
+    else
+    {
+        x = set('Odometry.X', p[0])
+        y = set('Odometry.Y', p[1])
+        theta = set('Odometry.Theta', p[2])
+    }
+
+    return [x, y, theta]
+}
+
+func gps(p)
+{
+    var x, y, theta
+    
+    if(p is null)
+    {
+        x = get('GPS.X')
+        y = get('GPS.Y')
+        theta = get('GPS.Theta')
+    }
+    else
+    {
+        x = set('GPS.X', p[0])
+        y = set('GPS.Y', p[1])
+        theta = set('GPS.Theta', p[2])
+    }
+
+    return [x, y, theta]
+}
+
+func odometryStd(p)
+{
+    var l, a
+    
+    if(p is null)
+    {
+        l = get('Odometry.Std.Linear')
+        a = get('Odometry.Std.Angular')
+    }
+    else
+    {
+        l = set('Odometry.Std.Linear', p[0])
+        a = set('Odometry.Std.Angular', p[1])
+    }
+
+    return [l, a]
+}
+
+func gpsStd(p)
+{
+    var x, y, theta
+    
+    if(p is null)
+    {
+        x = get('GPS.Std.X')
+        y = get('GPS.Std.Y')
+        theta = get('GPS.Std.Theta')
+    }
+    else
+    {
+        x = set('GPS.Std.X', p[0])
+        y = set('GPS.Std.Y', p[1])
+        theta = set('GPS.Std.Theta', p[2])
+    }
+
+    return [x, y, theta]
+}
+
+func velocity(p)
+{
+    var l, a
+    
+    if(p is null)
+    {
+        l = get('Velocity.Linear')
+        a = get('Velocity.Angular')
+    }
+    else
+    {
+        l = set('Velocity.Linear', p[0])
+        a = set('Velocity.Angular', p[1])
+    }
+
+    return [l, a]
+}
+
+func lowLevelControl(p)
+{   
+    if(p is null)
+    {
+        p = get('Controller.LowLevel')
+    }
+    else
+    {
+        if(p)
+            p = 1.0
+        else
+            p = 0.0
+        p = set('Controller.LowLevel', p)
+    }
+
+    return (p > 0.0)
+}
+
+func wheels(p)
+{
+    var l, r
+    
+    if(p is null)
+    {
+        l = get('Velocity.Angular.Left')
+        r = get('Velocity.Angular.Right')
+    }
+    else
+    {
+        l = set('Velocity.Angular.Left', p[0])
+        r = set('Velocity.Angular.Right', p[1])
+    }
+
+    return [l, r]
+}
+
+func trace(p)
+{   
+    if(p is null)
+    {
+        p = get('Trace')
+    }
+    else
+    {
+        if(p)
+            p = 1.0
+        else
+            p = 0.0
+        p = set('Trace', p)
+    }
+
+    return (p > 0.0)
+}
+
+func manual(p)
+{   
+    if(p is null)
+    {
+        p = get('Controller.Manual')
+    }
+    else
+    {
+        if(p)
+            p = 1.0
+        else
+            p = 0.0
+        p = set('Controller.Manual', p)
+    }
+
+    return (p > 0.0)
+}
+
+func fixAngle(rad)
+{
+    rad = rad % (math.pi * 2)
+    if(rad > math.pi)
+        rad = rad - (2 * math.pi)
+    else if(rad < -math.pi)
+        rad = rad + (2 * math.pi)
+    return rad
+}
+
+func camera()
+{
+    var sz = get("Camera.Capture")
+    if(sz != 230400)
+        return null
+
+    var rawData = getData()
+    var data = rawData.trunc(sz)
+    return data
+}
+
+func lidar(rone)
+{
+    var sz = get("Lidar.Read")
+    var dataRaw = getData()    
+    var inc = math.pi / sz
+    var start = -(sz/2)*inc
+    var end = -start
+    var half = math.pi / 2
+
+    var angles = [0] * sz
+    var data = [0] * sz
+    var x = [0] * sz
+    var y = [0] * sz
+    for(var i = 0; i < sz; i++)
+    {
+        data[i] = dataRaw.float()
+        angles[i] = start + i * inc
+        if(data[i] > 0)
+        {
+            x[i] = -data[i] * cos(half + angles[i])
+            y[i] =  data[i] * sin(half + angles[i])
+        }
+    }
+
+    var ret = {'size' : sz, 'distance' : data, 'angle' : angles, 'x' : x, 'y' : y }
+    return ret
+}

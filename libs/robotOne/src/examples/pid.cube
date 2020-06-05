@@ -1,0 +1,72 @@
+import robotOne as ro
+import math
+
+// Robot
+ro.connect("127.0.0.1")
+ro.trace(true)
+ro.odometryStd([0.01, 0])
+
+// Control
+var Krho = 1.0
+var Kp = 1.0
+var Ki = 0.01
+var Kd = 0.01
+var MaxV = 1.0
+var MaxD = 1.0
+
+var alpha_i = 0
+var alpha_1 = 0
+var R, p, dx, dy, gamma, alpha, v, w
+
+// Start position
+ro.pose([0, 0, 0])
+
+// Goals
+var GL = [[0, 0, 0], [0, 20, 0], [20, 20, 0], [20, 0, 0], [0, 0, 0]]
+
+// For each goal
+for(var G in GL)
+{
+    println(G)
+
+    // Control until reach the current goal
+    alpha_i = 0
+    alpha_1 = 0
+    do
+    {
+        // Calculates the distance
+        R = ro.pose()
+        dx = G[0] - R[0]
+        dy = G[1] - R[1]
+        p = math.sqrt(dx^2 + dy^2)
+        
+        // PID
+        gamma = math.atan2(dy, dx)
+        alpha = ro.fixAngle(gamma - R[2])
+        v = math.min(Krho * p, MaxV)
+        w = Kp * alpha + Ki * alpha_i + Kd * (alpha - alpha_1)
+
+        alpha_1 = alpha
+        alpha_i = alpha_i + alpha
+
+        // Update robot velocity
+        ro.velocity([v, w])
+
+        // Waits the next robot cycle
+        ro.wait()
+
+    }while(p > MaxD)
+}
+
+// Stops the robot
+ro.velocity([0, 0])
+ro.odometryStd([0, 0])
+
+// Prints the current position
+R = ro.pose()
+println(R)
+
+
+// Disconnect the robot
+ro.trace(false)
+ro.disconnect()
