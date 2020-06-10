@@ -1,22 +1,26 @@
 class WebTemplate
 {
-    var result = '';
+    var result = null;
     var data = {};
 
     func print()
     {
+        if(this.result is null)
+            this.result = '';
         this.result += args.join('');
     }
 
     func println()
     {
+        if(this.result is null)
+            this.result = '';
         this.result += args.join('');
         this.result += '\n';
     }
 
     func clear()
     {
-        this.result = '';
+        this.result = null;
         this.data = {};
     }
 
@@ -27,6 +31,8 @@ class WebTemplate
 
     func append(code)
     {
+        if(this.result is null)
+            this.result = '';
         this.result += code;
     }
 

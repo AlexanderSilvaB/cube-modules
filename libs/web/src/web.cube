@@ -4,6 +4,23 @@ import webTemplate as default;
 
 
 global var Web = WebTemplate();
+var bkpPrint = print;
+var bkpPrintln = println;
+
+var webString = ''
+
+func webPrint()
+{
+    for(var i in args)
+        webString += i;
+}
+
+func webPrintln()
+{
+    for(var i in args)
+        webString += i;
+    webString += '<br/>'
+}
 
 func getPage(server, client, request, data)
 {
@@ -32,9 +49,23 @@ func getPage(server, client, request, data)
 
             if(exists(requestCube))
             {
+                bkpPrint = print;
+                bkpPrintln = println;
+
+                print = webPrint;
+                println = webPrintln;
+                webString = '';
+        
                 require(request);
                 response = Web.result;
+                if(response == null)
+                {
+                    response = webString;
+                }
                 Web.clear();
+
+                print = bkpPrint;
+                println = bkpPrintln;
             }
             else if(isdir(request))
             {
