@@ -4,10 +4,10 @@ import webTemplate as default;
 
 
 global var Web = WebTemplate();
-var bkpPrint = print;
-var bkpPrintln = println;
+global var bkpPrint = print;
+global var bkpPrintln = println;
 
-var webString = ''
+global var webString = ''
 
 func webPrint()
 {
