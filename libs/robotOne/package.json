@@ -6,9 +6,9 @@
     "files": [
         "src/cube/robotOne.cube"
     ],
-    "examples": [
-        "src/examples/camera.cube",
-        "src/examples/pid.cube",
-        "src/examples/bug-1.cube"
+    "samples": [
+        "src/samples/camera.cube",
+        "src/samples/pid.cube",
+        "src/samples/bug-1.cube"
     ]
 }
