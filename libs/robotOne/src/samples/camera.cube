@@ -1,5 +1,5 @@
 import game
-import robotOne as ro
+import robotOne/robotOne as ro
 
 // Display
 game.display.title('Window')

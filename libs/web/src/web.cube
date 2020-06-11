@@ -1,6 +1,6 @@
 import socket;
 import paths;
-import webTemplate as default;
+import web/webTemplate as default;
 
 
 global var Web = WebTemplate();
