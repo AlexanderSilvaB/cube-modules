@@ -1,2 +1,2 @@
-# cube-packages
-Cube Packages Index
+# cube-modules
+Cube Modules Index
