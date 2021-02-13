@@ -1,0 +1,13 @@
+{
+    "name": "robotOne",
+    "description": "RobotOne Connector for Cube",
+    "version": "1.0",
+    "dependencies": [],
+    "files": [],
+    "packages": [
+        "torch.zip"
+    ],
+    "samples": [
+        "src/samples/xor.cube"
+    ]
+}

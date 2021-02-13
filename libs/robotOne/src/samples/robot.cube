@@ -1,0 +1,81 @@
+import robotOne as ro
+import math
+
+// Robot
+if(not ro.connect("127.0.0.1"))
+{
+    println('Could not connect')
+    exit(0)
+}
+ro.trace(true)
+ro.odometryStd([0, 0])
+
+// Initial
+var I = [-68.0, 85.0, -1.88]
+// Goal
+var G = [-81.0, 12.0, -1.73]
+// Derired error
+var E = 0.5
+// Sets the max linear speed
+var V = 10.0
+// Direction factor
+var DF = 5.0
+
+var R, p, dx, dy, v, w, W
+var lidar, distances
+
+// Start position
+ro.pose(I)
+
+// Control until reach the current goal
+do
+{
+    // Calculates the distance
+    R = ro.odometry()
+    dx = G[0] - R[0]
+    dy = G[1] - R[1]
+    p = math.sqrt(dx^2 + dy^2)
+    println('Dist: ', p)
+
+    // Calculates the target linear speed
+    v = math.min(V, 0.2 * p)
+
+    // Calculates the target angle
+    W = math.atan2(dy, dx) - R[2]
+    w = ro.fixAngle(W)
+
+    // Reads the lidar
+    lidar = ro.lidar()
+    distances = lidar.distance
+
+    // Adjust the target angle according to the lidar readings
+    for(var j = 0; j < lidar.size; j++)
+    {
+        distances[j] = DF * ( ( 8 - distances[j] ) / 8.0 ) * ( math.pi / lidar.size )
+        if(j < lidar.size / 2)
+            distances[j] = -distances[j]
+        w += distances[j]
+    }
+
+    println("Dist: ", p, " m, Speed: [ ", v, " m/s, ", math.deg(w)," deg/s ]")
+
+    // Update robot velocity
+    ro.velocity([v, w])
+
+    // Waits the next robot cycle
+    ro.wait()
+
+}while(p > E)
+
+// Stops the robot
+ro.velocity([0, 0])
+ro.odometryStd([0, 0])
+
+// Prints the current position
+R = ro.pose()
+println(R)
+
+
+// Disconnect the robot
+ro.trace(false)
+ro.disconnect()

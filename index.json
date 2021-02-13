@@ -3,6 +3,7 @@
         "libs/cv",
         "libs/web",
         "libs/bt",
-        "libs/robotOne"
+        "libs/robotOne",
+        "libs/torch"
     ]
 }

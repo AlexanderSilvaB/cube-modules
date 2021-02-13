@@ -1,14 +1,14 @@
 {
-    "name" : "cv",
+    "name": "cv",
     "description": "OpenCV for Cube",
     "version": "1.0",
-    "dependencies": [
-        
-    ],
+    "dependencies": [],
+    "directories": [],
     "files": [
-        "cube/cv.cube"
+        "src/cube/cv.cube"
     ],
-    "native" : [
-        "libcv"
-    ]
+    "build": [
+        "src/cv"
+    ],
+    "native": []
 }

@@ -1,0 +1,33 @@
+import torch
+import sciplot
+
+var x = torch.Tensor([[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]])
+var t = torch.Tensor([[0], [1], [1], [0], [1], [0], [0], [1]])
+
+var net = torch.nn.XOR(3, 1)
+var optim = torch.optim.RMSprop(net)
+var y, loss
+var history = []
+
+for(var ep = 0; ep < 1000; ep++)
+{
+    y = net(x)
+    loss = torch.mseLoss(y, t.detach())
+
+    optim.zeroGrad()
+    loss.backward()
+    optim.step()
+
+    println(ep, ' -> ', loss.mean()[0])
+    history.add(loss.mean()[0])
+}
+
+y = net(x).round().abs()
+for(var i = 0; i < y.len(); i++)
+{
+    println(x[i], ' -> ', y[i], ' | ', t[i], ' ', (y[i] == t[i] ? 'Ok' : ''))
+}
+
+println(net.str())
+
+sciplot.plot(history)
